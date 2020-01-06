@@ -5,6 +5,7 @@ CloudFormation do
   end
 
   Backup_BackupPlan(:BackupPlan) do 
+    DependsOn :BackupVault
     BackupPlan {
       BackupPlanName FnSub("${StackName}-Plan")
       BackupPlanRule [
@@ -16,9 +17,9 @@ CloudFormation do
           Lifecycle: {
             DeleteAfterDays: Ref("DailyRetention")
           },
-          RecoveryPointTags: [
-            { Key: "cfnbackup:type", Value: "daily" }
-          ]
+          RecoveryPointTags: {
+            "cfnbackup:type": "daily"
+          }
         },
         { 
           RuleName: FnSub("${StackName}-WeeklyRule"),
@@ -28,9 +29,9 @@ CloudFormation do
           Lifecycle: {
             DeleteAfterDays: Ref("WeeklyRetention")
           },
-          RecoveryPointTags: [
-            { Key: "cfnbackup:type", Value: "weekly" }
-          ]    
+          RecoveryPointTags: {
+            "cfnbackup:type": "weekly"
+          }
         },
         {
           RuleName: FnSub("${StackName}-MonthlyRule"),
@@ -40,9 +41,9 @@ CloudFormation do
           Lifecycle: {
             DeleteAfterDays: Ref("MonthlyRetention")
           },
-          RecoveryPointTags: [
-            { Key: "cfnbackup:type", Value: "monthly" }
-          ]
+          RecoveryPointTags: {
+            "cfnbackup:type": "monthly"
+          }
         },
         {
           RuleName: FnSub("${StackName}-YearlyRule"),
@@ -52,15 +53,16 @@ CloudFormation do
           Lifecycle: {
             DeleteAfterDays: Ref("YearlyRetention")
           },
-          RecoveryPointTags: [
-            { Key: "cfnbackup:type", Value: "yearly" }
-          ]
+          RecoveryPointTags: {
+            "cfnbackup:type": "yearly"
+          }
         }
       ]
     }
   end
   
   Backup_BackupSelection(:BackupSelection) do
+    DependsOn :BackupPlan
     BackupPlanId FnGetAtt(:BackupPlan, :BackupPlanId)
     BackupSelection {
       IamRoleArn FnSub("arn:aws:iam::${AWS::AccountId}:role/service-role/AWSBackupDefaultServiceRole")
