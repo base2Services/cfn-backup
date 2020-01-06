@@ -14,15 +14,3 @@ daily_cron: 0 0 * * ? *
 weekly_cron: 0 0 ? * 2 *
 monthly_cron: 0 0 1 * ? *
 yearly_cron: 0 0 1 1 ? *
-
-rules:
-  four_hourly:
-    cron: 0 0/4 * * ? *
-    retention: 7
-    tag_key: cfnbackup:four_hourly
-    tag_value: true
-  hourly:
-    cron: 0 0/1 * * ? *
-    retention: 3
-    tag_key: cfnbackup:hourly
-    tag_value: true
