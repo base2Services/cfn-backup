@@ -1,5 +1,22 @@
 CloudFormation do
 
+  # custom_rules = {
+  #   "fourhourly"=> {
+  #     "cron"=>"0 0/4 * * ? *", 
+  #     "retention"=>7,
+  #     "tag_key"=>"cfnbackup:fourhourly",
+  #     "tag_value"=>"true"
+  #   },
+  #   "hourly"=> {
+  #     "cron"=>"0 0/1 * * ? *", 
+  #     "retention"=>3,
+  #     "tag_key"=>"cfnbackup:hourly",
+  #     "tag_value"=>"true"
+  #   },
+  # }
+
+  # custom_rules = FnSub("${CustomRules}")
+
   Backup_BackupVault(:BackupVault) do
     BackupVaultName FnSub("${StackName}-BackupVault")
   end
@@ -75,6 +92,53 @@ CloudFormation do
       ]
       SelectionName FnSub("${StackName}-Selection")
     }
+  end
+
+  custom_rules.each do |rule|
+
+    rule_name = rule[0]
+    rule_cron = rule[1]['cron']
+    rule_retention = rule[1]['retention']
+    rule_tag_key = rule[1]['tag_key']
+    rule_tag_value = rule[1]['tag_value']
+
+    Backup_BackupPlan("#{rule_name}BackupPlan") do 
+      DependsOn :BackupVault
+      BackupPlan {
+        BackupPlanName FnSub("${StackName}-#{rule_name}Plan")
+        BackupPlanRule [
+          {
+            RuleName: FnSub("${StackName}-#{rule_name}Rule"),
+            StartWindowMinutes: 120,
+            TargetBackupVault: FnSub("${StackName}-BackupVault"),
+            ScheduleExpression: FnSub("cron(#{rule_cron})"),
+            Lifecycle: {
+              DeleteAfterDays: FnSub("#{rule_retention}")
+            },
+            RecoveryPointTags: {
+              "cfnbackup:type": "#{rule_name}"
+            }
+          }
+        ]
+      }
+    end
+
+    Backup_BackupSelection("#{rule_name}BackupSelection") do
+      DependsOn "#{rule_name}BackupPlan"
+      BackupPlanId FnGetAtt("#{rule_name}BackupPlan", :BackupPlanId)
+      BackupSelection {
+        IamRoleArn FnSub("arn:aws:iam::${AWS::AccountId}:role/service-role/AWSBackupDefaultServiceRole")
+        ListOfTags [
+          {
+            ConditionKey: FnSub("#{rule_tag_key}"),
+            ConditionType: "STRINGEQUALS",
+            ConditionValue: FnSub("#{rule_tag_value}")
+          }
+        ]
+        SelectionName FnSub("${StackName}-#{rule_name}Selection")
+      }      
+    end
+
   end
   
 end

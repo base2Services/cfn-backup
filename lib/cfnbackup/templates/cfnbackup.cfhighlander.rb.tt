@@ -14,6 +14,7 @@ CfhighlanderTemplate do
     ComponentParam 'WeeklyCron', '<%= @config['weekly_cron'] %>'
     ComponentParam 'MonthlyCron', '<%= @config['monthly_cron'] %>'
     ComponentParam 'YearlyCron', '<%= @config['yearly_cron'] %>'
+    ComponentParam 'CustomRules', '<%= @config['rules'] %>'
   end
 
   Component template: 'backup', name: 'backup', render: 'inline' do
