@@ -1,5 +1,0 @@
-#!/usr/bin/env ruby
-
-require "cfnbackup"
-
-CfnBackup::Cli.start( ARGV )
