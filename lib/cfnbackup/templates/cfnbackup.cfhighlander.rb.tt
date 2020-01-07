@@ -16,7 +16,7 @@ CfhighlanderTemplate do
     ComponentParam 'YearlyCron', '<%= @config['yearly_cron'] %>'
   end
 
-  Component template: 'backup', name: 'backup', render: 'inline' do
+  Component template: 'backup', name: 'backup', render: 'inline', config: <%= @config %> do
     parameter name: 'StackName', value: Ref('StackName')
     parameter name: 'TagKey', value: Ref('TagKey')
     parameter name: 'TagValue', value: Ref('TagValue')
