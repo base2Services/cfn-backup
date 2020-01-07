@@ -61,7 +61,7 @@ Simply ensure any resources you wish to be backed up have the tagged applied cor
 The following resources are currently supported by AWS Backup:
 * EFS File Systems
 * DynamoDB Tables
-* EBS Volumes
+* EBS Volumes (Tagging EC2 Instances is supported, doing this will backup all volumes attached)
 * RDS Instances
 * Storage Gateway
 
@@ -81,12 +81,35 @@ weekly_retention: 56 # 8 Weeks
 monthly_retention: 365 # 12 Months
 yearly_retention: 3652 # 10 Years
 
-# The default cron expressions for each rule
+# The default cron expressions for each rule (Space-seperated, AWS friendly)
 daily_cron: 0 0 * * ? * # At 12:00 AM UTC, every day
 weekly_cron: 0 0 ? * 1 * # At 12:00 AM UTC, only on Sunday
 monthly_cron: 0 0 1 * ? * # At 12:00 AM UTC, on day 1 of the month
 yearly_cron: 0 0 1 1 ? * # At 12:00 AM UTC, on day 1 of the month, only in January
 ```
+
+## Custom Rules
+
+If there are additional rules outside of the default Daily-Weekly-Monthly-Yearly plan, you can define these within your custom configuration file. You must define all properties specified in the example below:
+
+```yaml
+custom_rules:
+  hourly: # Alphanumeric name describing the rule
+    cron: 0 0/1 * * ? * # Space-seperated AWS cron expression
+    retention: 3 # Number in days to retain backups taken by this rule
+    tag_key: cfnbackup:custom # A tag key that the service will look for on resources
+    tag_value: hourly # The tag value that must match on the provided tag key
+```
+
+This will create a new Backup Plan, Backup Rule and Backup Selection per custom rule defined here. None of the regular configuration defaults or custom configuration defined in the previous section will have any impact on custom rules.
+
+**NOTE:** AWS Backup has a limitation where the minimum interval between jobs for a backup rule is 60 minutes. This means the lowest interval rule you can currently create will allow you to create *hourly* backups.
+
+## AWS Backup Pricing
+
+With AWS Backup, you pay only for the amount of backup storage you use and the amount of backup data you restore in the month. There is no minimum fee and there are no set-up charges. Deploying the CloudFormation is free, and so are the AWS Backup resources.
+
+Pricing for backup storage and restore differentiates between regions and resources. Please see the [AWS Backup pricing guide](https://aws.amazon.com/backup/pricing/) for a detailed breakdown per region for each resource.
 
 ## Contributing
 
