@@ -93,7 +93,7 @@ yearly_cron: 0 0 1 1 ? * # At 12:00 AM UTC, on day 1 of the month, only in Janua
 If there are additional rules outside of the default Daily-Weekly-Monthly-Yearly plan, you can define these within your custom configuration file. You must define all properties specified in the example below:
 
 ```yaml
-rules:
+custom_rules:
   hourly: # Alphanumeric name describing the rule
     cron: 0 0/1 * * ? * # Space-seperated AWS cron expression
     retention: 3 # Number in days to retain backups taken by this rule
@@ -102,6 +102,8 @@ rules:
 ```
 
 This will create a new Backup Plan, Backup Rule and Backup Selection per custom rule defined here. None of the regular configuration defaults or custom configuration defined in the previous section will have any impact on custom rules.
+
+**NOTE:** AWS Backup has a limitation where the minimum interval between jobs for a backup rule is 60 minutes. This means the lowest interval rule you can currently create will allow you to create *hourly* backups.
 
 ## AWS Backup Pricing
 
