@@ -11,7 +11,7 @@ CloudFormation do
       BackupPlanRule [
         {
           RuleName: FnSub("${StackName}-DailyRule"),
-          StartWindowMinutes: 120,
+          StartWindowMinutes: 60,
           TargetBackupVault: FnSub("${StackName}-BackupVault"),
           ScheduleExpression: FnSub("cron(${DailyCron})"),
           Lifecycle: {
@@ -23,7 +23,7 @@ CloudFormation do
         },
         { 
           RuleName: FnSub("${StackName}-WeeklyRule"),
-          StartWindowMinutes: 120,
+          StartWindowMinutes: 60,
           TargetBackupVault: FnSub("${StackName}-BackupVault"),
           ScheduleExpression: FnSub("cron(${WeeklyCron})"),
           Lifecycle: {
@@ -35,7 +35,7 @@ CloudFormation do
         },
         {
           RuleName: FnSub("${StackName}-MonthlyRule"),
-          StartWindowMinutes: 120,
+          StartWindowMinutes: 60,
           TargetBackupVault: FnSub("${StackName}-BackupVault"),
           ScheduleExpression: FnSub("cron(${MonthlyCron})"),
           Lifecycle: {
@@ -47,7 +47,7 @@ CloudFormation do
         },
         {
           RuleName: FnSub("${StackName}-YearlyRule"),
-          StartWindowMinutes: 120,
+          StartWindowMinutes: 60,
           TargetBackupVault: FnSub("${StackName}-BackupVault"),
           ScheduleExpression: FnSub("cron(${YearlyCron})"),
           Lifecycle: {
@@ -93,7 +93,7 @@ CloudFormation do
         BackupPlanRule [
           {
             RuleName: FnSub("${StackName}-#{rule_name}Rule"),
-            StartWindowMinutes: 120,
+            StartWindowMinutes: 60,
             TargetBackupVault: FnSub("${StackName}-BackupVault"),
             ScheduleExpression: FnSub("cron(#{rule_cron})"),
             Lifecycle: {
