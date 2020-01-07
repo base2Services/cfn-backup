@@ -95,6 +95,9 @@ module CfnBackup
       Log.logger.debug("CloudFormation template generated and validated")
       # Publishes the compiled cloudformation to S3 using the source bucket provided, outputting the master stack S3 path
       @template_url = cfhl.publish(compiler)
+      say("\n--------- Master Template URL ---------")
+      say("#{@template_url}")
+      say("---------------------------------------")
     end
 
   end
