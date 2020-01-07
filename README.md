@@ -103,6 +103,12 @@ rules:
 
 This will create a new Backup Plan, Backup Rule and Backup Selection per custom rule defined here. None of the regular configuration defaults or custom configuration defined in the previous section will have any impact on custom rules.
 
+## AWS Backup Pricing
+
+With AWS Backup, you pay only for the amount of backup storage you use and the amount of backup data you restore in the month. There is no minimum fee and there are no set-up charges. Deploying the CloudFormation is free, and so are the AWS Backup resources.
+
+Pricing for backup storage and restore differentiates between regions. Please see the [AWS Backup pricing guide](https://aws.amazon.com/backup/pricing/) for a detailed breakdown per region.
+
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/base2services/cfn-backup.
