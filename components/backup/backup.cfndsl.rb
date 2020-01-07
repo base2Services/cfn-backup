@@ -77,7 +77,22 @@ CloudFormation do
     }
   end
 
-  #TODO Figure out how to pass in config list for custom rules here
+  # custom_rules = {
+  #   "fourhourly"=> {
+  #     "cron"=>"0 0/4 * * ? *", 
+  #     "retention"=>7,
+  #     "tag_key"=>"cfnbackup:fourhourly",
+  #     "tag_value"=>"true"
+  #   },
+  #   "hourly"=> {
+  #     "cron"=>"0 0/1 * * ? *", 
+  #     "retention"=>3,
+  #     "tag_key"=>"cfnbackup:hourly",
+  #     "tag_value"=>"true"
+  #   },
+  # }
+
+  #TODO Figure out how to pass in config list for
   custom_rules.each do |rule|
 
     rule_name = rule[0]

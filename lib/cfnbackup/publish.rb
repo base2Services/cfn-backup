@@ -15,9 +15,9 @@ module CfnBackup
     class_option :region, aliases: :r, default: ENV['AWS_REGION'], desc: 'AWS Region'
     class_option :verbose, desc: 'Enable DEBUG logging', type: :boolean
 
-    class_option :config, desc: 'Provide a path to a config file to override defaults'
-    class_option :stack_name, desc: 'Override the default stack name for the AWS Backup stack'
-    class_option :source_bucket, desc: 'Source bucket to upload template files to'
+    class_option :config, desc: 'Provide a path to a config file to override defaults' # Optional
+    class_option :stack_name, desc: 'Override the default stack name for the AWS Backup stack' # Optional
+    class_option :source_bucket, desc: 'Source bucket to upload template files to' # Required
 
     def self.source_root
       File.dirname(__FILE__)
