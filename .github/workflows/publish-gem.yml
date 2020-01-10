@@ -1,9 +1,6 @@
 name: Publish to RubyGems
 
 on:
-  pull_request:
-    branches:
-      - master
   push:
     branches:
       - master
